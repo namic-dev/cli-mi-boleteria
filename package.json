@@ -7,7 +7,7 @@
     "format:check": "prettier --check .",
     "lint": "eslint --ext  .ts,.js,.cjs,.mjs .",
     "typecheck": "tsc --noEmit",
-    "ci": "pnpm format && pnpm lint && pnpm typecheck"
+    "ci:prepare": "pnpm format && pnpm lint && pnpm typecheck"
   },
   "packageManager": "pnpm@8.6.1",
   "dependencies": {
