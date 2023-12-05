@@ -10,6 +10,7 @@ import {
   type CityId,
   type ShowInformation,
 } from "./api/types"
+import { generateSeatsMatrix } from "./util"
 
 export const startPrompt = async () => {
   const cities = await getCities()
@@ -82,6 +83,7 @@ export const startPrompt = async () => {
   const seats = await getSeats(show.theaterId, show.id, show.cinemaWSCode)
 
   console.log(`Existen ${seats.available} asientos disponibles.`)
+  generateSeatsMatrix(seats.data)
 }
 
 const exit = () => {
