@@ -42,8 +42,9 @@ export const getMovieSchedule = async (
             const date = params[0]
             const time = params[2]
             const id = params[3]
-            const theaterId = params[6]
-            movieSchedule.push({ date, time, id, theaterId })
+            const theaterId = params[5]
+            const cinemaWSCode = params[6]
+            movieSchedule.push({ date, time, id, theaterId, cinemaWSCode })
           }
         }
       })

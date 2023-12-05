@@ -24,5 +24,34 @@ export interface MovieTime {
   date: string
   time: string
   theaterId: string
+  cinemaWSCode: CinemaWSCode
 }
+
 export type MovieTimeId = string
+
+export type CinemaWSCode = string
+
+export interface ShowSeats {
+  data: SeatsData
+  available: number
+  total: number
+}
+
+export interface SeatData {
+  code: string
+  x: string
+  y: string
+  status: number
+}
+
+export interface SeatsData {
+  width: string
+  height: string
+  seats: SeatData[]
+}
+
+export interface ShowInformation {
+  id: MovieTimeId
+  theaterId: CinemaId
+  cinemaWSCode: CinemaWSCode
+}
