@@ -1,20 +1,21 @@
 import prompts from "prompts"
 
 import { getCities } from "./api/get-cities"
+import { getDisposition } from "./api/get-disposition"
 import { getMovieList } from "./api/get-movie-list"
 import { getMovieSchedule } from "./api/get-movie-schedule"
-import { getSeats } from "./api/get-seats"
-import {
-  type CinemaId,
-  type MovieId,
-  type CityId,
-  type ShowInformation,
+import type {
+  CinemaId,
+  MovieId,
+  CityId,
+  MovieTimeId,
+  CinemaWSCode,
 } from "./api/types"
 import { generateSeatsMatrix } from "./util"
 
 export const startPrompt = async () => {
+  // Get cities
   const cities = await getCities()
-
   const cityResponse = await prompts(
     {
       type: "select",
@@ -31,59 +32,112 @@ export const startPrompt = async () => {
   )
   const cityId = cityResponse.cityId as CityId
 
+  // Get cinema
   const movieList = await getMovieList(cityId)
 
-  const cinemaResponse = await prompts({
-    type: "select",
-    name: "cinemaId",
-    message: "En qué cine estabas buscando?",
-    choices: movieList.map((movie) => ({
-      title: movie.cinema.name,
-      value: movie.cinema.id,
-    })),
-  })
-  const movieResponse = await prompts({
-    type: "select",
-    name: "movieId",
-    message: "Qué película tenés ganas de ver?",
-    choices: () => {
-      const selectedCinemaMovies = movieList.find(
-        (movie) => movie.cinema.id === cinemaResponse.cinemaId,
-      )?.movies
-      if (!selectedCinemaMovies) {
-        return []
-      }
-      return selectedCinemaMovies.map((movie) => ({
-        title: movie.name,
-        value: movie.id,
-      }))
+  interface CinemaResponse {
+    cinemaId: CinemaId
+    cityId: CityId
+  }
+  const cinemaResponse = await prompts(
+    {
+      type: "select",
+      name: "cinema",
+      message: "En qué cine estabas buscando?",
+      choices: movieList.map((movie) => ({
+        title: movie.cinema.name,
+        value: {
+          cinemaId: movie.cinema.id,
+          cityId: movie.cinema.cityId,
+        } satisfies CinemaResponse,
+      })),
     },
-  })
+    {
+      onCancel: exit,
+    },
+  )
+  const cinema = cinemaResponse.cinema as CinemaResponse
+
+  // Get movie
+  const movieResponse = await prompts(
+    {
+      type: "select",
+      name: "movieId",
+      message: "Qué película tenés ganas de ver?",
+      choices: () => {
+        const selectedCinemaMovies = movieList.find(
+          (movie) => movie.cinema.id === cinema.cinemaId,
+        )?.movies
+        if (!selectedCinemaMovies) {
+          return []
+        }
+        return selectedCinemaMovies.map((movie) => ({
+          title: movie.name,
+          value: movie.id,
+        }))
+      },
+    },
+    {
+      onCancel: exit,
+    },
+  )
+
+  // Get time
   const movieSchedule = await getMovieSchedule(
-    cityId,
-    cinemaResponse.cinemaId as CinemaId,
+    cinema.cityId,
+    cinema.cinemaId,
     movieResponse.movieId as MovieId,
   )
 
-  const functionResponse = await prompts({
-    type: "select",
-    name: "show",
-    message: "A qué hora querés ir?",
-    choices: movieSchedule.map((movie) => ({
-      title: `${movie.date} ${movie.time}`,
-      value: {
-        id: movie.id,
-        theaterId: movie.theaterId,
-        cinemaWSCode: movie.cinemaWSCode,
-      },
-    })),
-  })
+  interface ShowResponse {
+    cinemaId: string
+    id: MovieTimeId
+    cinemaWSCode: CinemaWSCode
+  }
 
-  const show = functionResponse.show as ShowInformation
-  const seats = await getSeats(show.theaterId, show.id, show.cinemaWSCode)
+  const showResponse = await prompts(
+    {
+      type: "select",
+      name: "show",
+      message: "A qué hora querés ir?",
+      choices: movieSchedule.map((movie) => ({
+        title: `${movie.date} ${movie.time}`,
+        value: {
+          id: movie.id,
+          cinemaId: movie.cinemaId,
+          cinemaWSCode: movie.cinemaWSCode,
+        } satisfies ShowResponse,
+      })),
+    },
+    {
+      onCancel: exit,
+    },
+  )
 
-  console.log(`Existen ${seats.available} asientos disponibles.`)
-  generateSeatsMatrix(seats.data)
+  // Show seats
+  const show = showResponse.show as ShowResponse
+  const disposition = await getDisposition(
+    show.cinemaId,
+    show.id,
+    show.cinemaWSCode,
+  )
+
+  console.log(`Existen ${disposition.available} asientos disponibles.`)
+  generateSeatsMatrix(disposition)
+
+  const continueResponse = await prompts(
+    {
+      type: "confirm",
+      name: "continue",
+      message: "Querés hacer otra consulta?",
+      initial: true,
+    },
+    {
+      onCancel: exit,
+    },
+  )
+
+  if (!continueResponse.continue) exit()
 }
 
 const exit = () => {

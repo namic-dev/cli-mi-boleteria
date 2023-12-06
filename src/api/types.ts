@@ -15,6 +15,7 @@ export type MovieName = string
 export interface Cinema {
   id: CinemaId
   name: CinemaName
+  cityId: CityId
 }
 export type CinemaId = string
 export type CinemaName = string
@@ -23,14 +24,28 @@ export interface MovieTime {
   id: MovieTimeId
   date: string
   time: string
-  theaterId: string
+  cinemaId: CinemaId
   cinemaWSCode: CinemaWSCode
 }
-
 export type MovieTimeId = string
-
 export type CinemaWSCode = string
 
+export interface Seat {
+  id: SeatId
+  x: number
+  y: number
+  isAvailable: boolean
+}
+export type SeatId = string
+
+export interface Disposition {
+  width: number
+  height: number
+  seats: Seat[]
+  available: number
+}
+
+/*
 export interface ShowSeats {
   data: SeatsData
   available: number
@@ -39,9 +54,9 @@ export interface ShowSeats {
 
 export interface SeatData {
   code: string
-  x: string
-  y: string
-  status: number
+  x: number
+  y: number
+  isAvailable: boolean
 }
 
 export interface SeatsData {
@@ -55,3 +70,4 @@ export interface ShowInformation {
   theaterId: CinemaId
   cinemaWSCode: CinemaWSCode
 }
+*/

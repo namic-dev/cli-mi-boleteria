@@ -31,6 +31,7 @@ export const getMovieList = async (
   $("li > ul").each((_, element) => {
     let cinemaName: CinemaName | undefined
     let cinemaId: CinemaId | undefined
+    let cityId: CityId | undefined
     const movies: Movie[] = []
 
     $(element)
@@ -51,6 +52,9 @@ export const getMovieList = async (
             if (cinemaId === undefined) {
               cinemaId = params[3]
             }
+            if(cityId === undefined) {
+              cityId = params[5]
+            }
 
             movies.push({ id: movieId, name: movieName })
           }
@@ -63,8 +67,11 @@ export const getMovieList = async (
     if (cinemaId === undefined) {
       throw new Error("Could not find cinema id")
     }
+    if (cityId === undefined) {
+      throw new Error("Could not find city id")
+    }
 
-    movieList.push({ cinema: { id: cinemaId, name: cinemaName }, movies })
+    movieList.push({ cinema: { id: cinemaId, name: cinemaName, cityId: cityId }, movies })
   })
 
   return movieList
