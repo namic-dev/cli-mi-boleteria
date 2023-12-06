@@ -1,4 +1,4 @@
-lockfileVersion: '6.1'
+lockfileVersion: '6.0'
 
 settings:
   autoInstallPeers: true
@@ -7,7 +7,7 @@ settings:
 dependencies:
   '@t3-oss/env-core':
     specifier: ^0.6.1
-    version: 0.6.1(typescript@5.2.2)(zod@3.22.2)
+    version: 0.6.1(typescript@5.2.2)(zod@3.22.4)
   '@types/cli-progress':
     specifier: ^3.11.2
     version: 3.11.2
@@ -24,8 +24,8 @@ dependencies:
     specifier: ^2.4.2
     version: 2.4.2
   zod:
-    specifier: ^3.22.2
-    version: 3.22.2
+    specifier: ^3.22.4
+    version: 3.22.4
 
 devDependencies:
   '@trivago/prettier-plugin-sort-imports':
@@ -291,14 +291,14 @@ packages:
       fastq: 1.15.0
     dev: true
 
-  /@t3-oss/env-core@0.6.1(typescript@5.2.2)(zod@3.22.2):
+  /@t3-oss/env-core@0.6.1(typescript@5.2.2)(zod@3.22.4):
     resolution: {integrity: sha512-KQD7qEDJtkWIWWmTVjNvk0wnHpkvAQ6CRbUxbWMFNG/fiosBQDQvtRpBNu6USxBscJCoC4z6y7P9MN52/mLOzw==}
     peerDependencies:
       typescript: '>=4.7.2'
       zod: ^3.0.0
     dependencies:
       typescript: 5.2.2
-      zod: 3.22.2
+      zod: 3.22.4
     dev: false
 
   /@trivago/prettier-plugin-sort-imports@4.1.1(prettier@2.8.8):
@@ -1544,6 +1544,6 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /zod@3.22.2:
-    resolution: {integrity: sha512-wvWkphh5WQsJbVk1tbx1l1Ly4yg+XecD+Mq280uBGt9wa5BKSWf4Mhp6GmrkPixhMxmabYY7RbzlwVP32pbGCg==}
+  /zod@3.22.4:
+    resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
     dev: false

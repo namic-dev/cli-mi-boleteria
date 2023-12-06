@@ -20,6 +20,7 @@ export const getMovieSchedule = async (
   form.append("cityId", cityId)
   form.append("cinemaId", cinemaId)
   form.append("showId", movieId)
+
   const res = await axios.post<string>(
     `${env.MIBOLETERIA_API_BASE_URL}/parts/ajax_horariosShow.php`,
     form,
@@ -42,9 +43,9 @@ export const getMovieSchedule = async (
             const date = params[0]
             const time = params[2]
             const id = params[3]
-            const theaterId = params[5]
+            const cinemaId = params[5]
             const cinemaWSCode = params[6]
-            movieSchedule.push({ date, time, id, theaterId, cinemaWSCode })
+            movieSchedule.push({ date, time, id, cinemaId, cinemaWSCode })
           }
         }
       })
