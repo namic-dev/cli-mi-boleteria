@@ -52,7 +52,7 @@ export const getMovieList = async (
             if (cinemaId === undefined) {
               cinemaId = params[3]
             }
-            if(cityId === undefined) {
+            if (cityId === undefined) {
               cityId = params[5]
             }
 
@@ -71,7 +71,10 @@ export const getMovieList = async (
       throw new Error("Could not find city id")
     }
 
-    movieList.push({ cinema: { id: cinemaId, name: cinemaName, cityId: cityId }, movies })
+    movieList.push({
+      cinema: { id: cinemaId, name: cinemaName, cityId: cityId },
+      movies,
+    })
   })
 
   return movieList

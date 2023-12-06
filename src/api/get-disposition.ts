@@ -57,7 +57,9 @@ export const getDisposition = async (
     available: 0,
   }
 
-  disposition.available = disposition.seats.filter(seat => seat.isAvailable).length
+  disposition.available = disposition.seats.filter(
+    (seat) => seat.isAvailable,
+  ).length
 
   return disposition
 }

@@ -137,7 +137,9 @@ export const startPrompt = async () => {
     },
   )
 
-  if (!continueResponse.continue) exit()
+  if (!continueResponse.continue) {
+    exit()
+  }
 }
 
 const exit = () => {

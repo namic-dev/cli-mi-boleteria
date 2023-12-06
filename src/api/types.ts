@@ -44,30 +44,3 @@ export interface Disposition {
   seats: Seat[]
   available: number
 }
-
-/*
-export interface ShowSeats {
-  data: SeatsData
-  available: number
-  total: number
-}
-
-export interface SeatData {
-  code: string
-  x: number
-  y: number
-  isAvailable: boolean
-}
-
-export interface SeatsData {
-  width: string
-  height: string
-  seats: SeatData[]
-}
-
-export interface ShowInformation {
-  id: MovieTimeId
-  theaterId: CinemaId
-  cinemaWSCode: CinemaWSCode
-}
-*/
