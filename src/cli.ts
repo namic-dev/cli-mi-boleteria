@@ -1,5 +1,7 @@
 import { createWriteStream } from "fs"
+import open from "open"
 import prompts from "prompts"
+import tmp from "tmp"
 
 import { getCities } from "./api/get-cities"
 import { getDisposition } from "./api/get-disposition"
@@ -13,8 +15,6 @@ import type {
   CinemaWSCode,
 } from "./api/types"
 import { buildHtml, generateSeatsMatrix } from "./util"
-import open from "open"
-import tmp from "tmp"
 
 export const startPrompt = async () => {
   // Get cities
