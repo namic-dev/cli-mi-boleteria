@@ -12,7 +12,7 @@ import type {
   MovieId,
   CityId,
   MovieTimeId,
-  CinemaWSCode,
+  Disposition,
 } from "./api/types"
 import { buildHtml, generateSeatsMatrix } from "./util"
 
@@ -92,10 +92,23 @@ export const startPrompt = async () => {
     movieResponse.movieId as MovieId,
   )
 
+  const proyections = await Promise.all(
+    movieSchedule.map(async (movie) => {
+      const disposition = await getDisposition(
+        movie.cinemaId,
+        movie.id,
+        movie.cinemaWSCode,
+      )
+      return {
+        movie,
+        disposition,
+      }
+    }),
+  )
+
   interface ShowResponse {
-    cinemaId: string
     id: MovieTimeId
-    cinemaWSCode: CinemaWSCode
+    disposition: Disposition
   }
 
   const showResponse = await prompts(
@@ -103,13 +116,13 @@ export const startPrompt = async () => {
       type: "select",
       name: "show",
       message: "A qué hora querés ir?",
-      choices: movieSchedule.map((movie) => ({
-        title: `${movie.date} ${movie.time}`,
+      choices: proyections.map((proyection) => ({
+        title: `${proyection.movie.date} ${proyection.movie.time}`,
         value: {
-          id: movie.id,
-          cinemaId: movie.cinemaId,
-          cinemaWSCode: movie.cinemaWSCode,
+          id: proyection.movie.id,
+          disposition: proyection.disposition,
         } satisfies ShowResponse,
+        disabled: proyection.disposition.available === 0,
       })),
     },
     {
@@ -117,16 +130,9 @@ export const startPrompt = async () => {
     },
   )
 
-  // Show seats
   const show = showResponse.show as ShowResponse
-  const disposition = await getDisposition(
-    show.cinemaId,
-    show.id,
-    show.cinemaWSCode,
-  )
-
-  console.log(`Existen ${disposition.available} asientos disponibles.`)
-  generateSeatsMatrix(disposition)
+  generateSeatsMatrix(show.disposition)
+  console.log(`Existen ${show.disposition.available} asientos disponibles.`)
 
   const openResponse = await prompts(
     {
@@ -142,7 +148,6 @@ export const startPrompt = async () => {
 
   if (openResponse.open) {
     const tmpFile = tmp.fileSync({ postfix: ".html" })
-    console.log(tmpFile.name)
     const fs = createWriteStream(tmpFile.name)
     fs.once("open", () => {
       fs.end(
