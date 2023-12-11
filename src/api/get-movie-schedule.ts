@@ -45,7 +45,15 @@ export const getMovieSchedule = async (
             const id = params[3]
             const cinemaId = params[5]
             const cinemaWSCode = params[6]
-            movieSchedule.push({ date, time, id, cinemaId, cinemaWSCode })
+            const isAllocationEnabled = params[7] === "1"
+            movieSchedule.push({
+              date,
+              time,
+              id,
+              cinemaId,
+              cinemaWSCode,
+              isAllocationEnabled,
+            })
           }
         }
       })

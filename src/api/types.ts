@@ -26,6 +26,7 @@ export interface MovieTime {
   time: string
   cinemaId: CinemaId
   cinemaWSCode: CinemaWSCode
+  isAllocationEnabled: boolean
 }
 export type MovieTimeId = string
 export type CinemaWSCode = string
