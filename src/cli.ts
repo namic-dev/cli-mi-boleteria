@@ -1,4 +1,7 @@
+import { createWriteStream } from "fs"
+import open from "open"
 import prompts from "prompts"
+import tmp from "tmp"
 
 import { getCities } from "./api/get-cities"
 import { getDisposition } from "./api/get-disposition"
@@ -11,7 +14,7 @@ import type {
   MovieTimeId,
   CinemaWSCode,
 } from "./api/types"
-import { generateSeatsMatrix } from "./util"
+import { buildHtml, generateSeatsMatrix } from "./util"
 
 export const startPrompt = async () => {
   // Get cities
@@ -124,6 +127,35 @@ export const startPrompt = async () => {
 
   console.log(`Existen ${disposition.available} asientos disponibles.`)
   generateSeatsMatrix(disposition)
+
+  const openResponse = await prompts(
+    {
+      type: "confirm",
+      name: "open",
+      message: "Querés abrir el navegador para comprar las entradas?",
+      initial: true,
+    },
+    {
+      onCancel: exit,
+    },
+  )
+
+  if (openResponse.open) {
+    const tmpFile = tmp.fileSync({ postfix: ".html" })
+    console.log(tmpFile.name)
+    const fs = createWriteStream(tmpFile.name)
+    fs.once("open", () => {
+      fs.end(
+        buildHtml(
+          cinema.cityId,
+          cinema.cinemaId,
+          movieResponse.movieId as MovieId,
+          show.id,
+        ),
+      )
+    })
+    await open(tmpFile.name)
+  }
 
   const continueResponse = await prompts(
     {

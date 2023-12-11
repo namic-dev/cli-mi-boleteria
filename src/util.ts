@@ -1,4 +1,10 @@
-import type { Disposition } from "./api/types"
+import type {
+  CinemaId,
+  CityId,
+  Disposition,
+  MovieId,
+  MovieTimeId,
+} from "./api/types"
 
 export const generateSeatsMatrix = (disposition: Disposition): void => {
   const matrix: string[][] = []
@@ -38,4 +44,36 @@ export const generateSeatsMatrix = (disposition: Disposition): void => {
 
     console.log(line)
   }
+}
+
+export const buildHtml = (
+  cityId: CityId,
+  cinemaId: CinemaId,
+  movieId: MovieId,
+  showId: MovieTimeId,
+): string => {
+  return `
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Boletería</title>
+  </head>
+  <body>
+    <form 
+      action="https://miboleteria.com.ar/compraExterna.php" 
+      method="post" 
+      id="form" 
+      enctype="application/x-www-form-urlencoded"
+    >
+      <input type="hidden" name="cineId" value="${cinemaId}">
+      <input type="hidden" name="showId" value="${movieId}">
+      <input type="hidden" name="cityId" value="${cityId}">
+      <input type="hidden" name="performanceId" value="${showId}">
+    </form>
+    <script>
+      window.location = "javascript:document.getElementById('form').submit()"
+    </script>
+  </body>
+  `
 }
