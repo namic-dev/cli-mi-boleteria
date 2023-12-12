@@ -22,8 +22,7 @@ export type CinemaName = string
 
 export interface MovieTime {
   id: MovieTimeId
-  date: string
-  time: string
+  date: Date
   cinemaId: CinemaId
   cinemaWSCode: CinemaWSCode
   isAllocationEnabled: boolean

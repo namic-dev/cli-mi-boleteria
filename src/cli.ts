@@ -120,8 +120,17 @@ export const startPrompt = async () => {
 
   interface ShowResponse {
     id: MovieTimeId
+    isAllocationAvailable: boolean
     disposition: Disposition
   }
+
+  const formater = Intl.DateTimeFormat("es-AR", {
+    weekday: "short",
+    month: "numeric",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+  })
 
   const showResponse = await prompts(
     {
@@ -129,9 +138,10 @@ export const startPrompt = async () => {
       name: "show",
       message: "A qué hora querés ir?",
       choices: proyections.map((proyection) => ({
-        title: `${proyection.movie.date} ${proyection.movie.time}`,
+        title: formater.format(proyection.movie.date),
         value: {
           id: proyection.movie.id,
+          isAllocationAvailable: proyection.movie.isAllocationEnabled,
           disposition: proyection.disposition,
         } satisfies ShowResponse,
         disabled:
@@ -145,7 +155,7 @@ export const startPrompt = async () => {
   )
 
   const show = showResponse.show as ShowResponse
-  if (show.disposition.width !== 0 && show.disposition.height !== 0) {
+  if (show.isAllocationAvailable) {
     generateSeatsMatrix(show.disposition)
     console.log(`Existen ${show.disposition.available} asientos disponibles.`)
   }
