@@ -9,7 +9,11 @@ async function main() {
   }
 }
 
-main().catch((err) => {
-  console.error(err)
+main().catch((err: unknown) => {
+  if (err instanceof Error) {
+    console.error(err.message)
+  } else {
+    console.error(err)
+  }
   process.exit(1)
 })
