@@ -94,6 +94,18 @@ export const startPrompt = async () => {
 
   const proyections = await Promise.all(
     movieSchedule.map(async (movie) => {
+      if (!movie.isAllocationEnabled) {
+        return {
+          movie,
+          disposition: {
+            width: 0,
+            height: 0,
+            seats: [],
+            available: 0,
+          },
+        }
+      }
+
       const disposition = await getDisposition(
         movie.cinemaId,
         movie.id,
@@ -122,7 +134,9 @@ export const startPrompt = async () => {
           id: proyection.movie.id,
           disposition: proyection.disposition,
         } satisfies ShowResponse,
-        disabled: proyection.disposition.available === 0,
+        disabled:
+          proyection.movie.isAllocationEnabled &&
+          proyection.disposition.available === 0,
       })),
     },
     {
@@ -131,8 +145,10 @@ export const startPrompt = async () => {
   )
 
   const show = showResponse.show as ShowResponse
-  generateSeatsMatrix(show.disposition)
-  console.log(`Existen ${show.disposition.available} asientos disponibles.`)
+  if (show.disposition.width !== 0 && show.disposition.height !== 0) {
+    generateSeatsMatrix(show.disposition)
+    console.log(`Existen ${show.disposition.available} asientos disponibles.`)
+  }
 
   const openResponse = await prompts(
     {
