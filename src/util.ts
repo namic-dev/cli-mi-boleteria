@@ -12,7 +12,7 @@ export const generateSeatsMatrix = (disposition: Disposition): void => {
   const width = disposition.width
 
   for (let i = 0; i < height; i++) {
-    matrix[i] = new Array<string>(width).fill(" ")
+    matrix[i] = new Array<string>(width).fill("  ")
   }
 
   let maxWidth = 0
@@ -23,7 +23,7 @@ export const generateSeatsMatrix = (disposition: Disposition): void => {
     if (seat.x > maxWidth) maxWidth = seat.x
   }
 
-  console.log(String.fromCodePoint(0x2b1c).repeat(maxWidth)) // ⬜
+  console.log(String.fromCodePoint(0x2b1c).repeat(maxWidth + 2)) // ⬜
   console.log()
 
   let isEmptyStart = true
