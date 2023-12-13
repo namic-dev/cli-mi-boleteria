@@ -77,3 +77,12 @@ export const buildHtml = (
   </body>
   `
 }
+
+export const getDate = (date: string, time: string): Date => {
+  const year = Number(date.substring(0, 4))
+  const month = Number(date.substring(4, 6)) - 1
+  const day = Number(date.substring(6, 8))
+  const hour = Number(time.substring(0, 2))
+  const minute = Number(time.substring(3, 5))
+  return new Date(year, month, day, hour, minute)
+}

@@ -2,6 +2,7 @@ import axios from "axios"
 import * as cheerio from "cheerio"
 
 import { env } from "../env"
+import { getDate } from "../util"
 import {
   type CityId,
   type CinemaId,
@@ -47,8 +48,7 @@ export const getMovieSchedule = async (
             const cinemaWSCode = params[6]
             const isAllocationEnabled = params[7] === "1"
             movieSchedule.push({
-              date,
-              time,
+              date: getDate(date, time),
               id,
               cinemaId,
               cinemaWSCode,
