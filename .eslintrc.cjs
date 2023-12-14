@@ -23,6 +23,7 @@ const config = {
       { checksVoidReturn: { attributes: false } },
     ],
   },
+  ignorePatterns: ["**/*.js", "**/*.cjs"],
 }
 
 module.exports = config

@@ -9,11 +9,7 @@ async function main() {
   }
 }
 
-main().catch((err: unknown) => {
-  if (err instanceof Error) {
-    console.error(err.message)
-  } else {
-    console.error(err)
-  }
+main().catch(() => {
+  console.log("Existe un problema con mi boleteria 😢. Intentá más tarde.")
   process.exit(1)
 })

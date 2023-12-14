@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es2017",
-    "module": "esnext",
+    "module": "commonjs",
     "allowJs": true,
     "checkJs": true,
     "forceConsistentCasingInFileNames": true,
@@ -10,10 +10,10 @@
     "moduleResolution": "node",
     "incremental": true,
     "baseUrl": ".",
-    "noEmit": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "outDir": "build"
   },
-  "include": [".eslintrc.cjs", "**/*.ts", "**/*.cjs", "**/*.mjs"],
+  "include": ["**/*.ts"],
   "exclude": ["node_modules"],
   "ts-node": {
     "compilerOptions": {

@@ -147,6 +147,9 @@ export const startPrompt = async () => {
         disabled:
           proyection.movie.isAllocationEnabled &&
           proyection.disposition.available === 0,
+        description: proyection.movie.isAllocationEnabled
+          ? `${proyection.disposition.available} asientos disponibles.`
+          : "",
       })),
     },
     {
@@ -157,7 +160,6 @@ export const startPrompt = async () => {
   const show = showResponse.show as ShowResponse
   if (show.isAllocationAvailable) {
     generateSeatsMatrix(show.disposition)
-    console.log(`Existen ${show.disposition.available} asientos disponibles.`)
   }
 
   const openResponse = await prompts(
