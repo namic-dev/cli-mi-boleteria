@@ -28,7 +28,7 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "lts"
+          node-version: "lts/Hydrogen"
 
       - uses: pnpm/action-setup@v2.2.4
         name: Install pnpm
