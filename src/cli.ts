@@ -147,7 +147,9 @@ export const startPrompt = async () => {
         disabled:
           proyection.movie.isAllocationEnabled &&
           proyection.disposition.available === 0,
-        description: `${proyection.disposition.available} asientos disponibles.`,
+        description: proyection.movie.isAllocationEnabled
+          ? `${proyection.disposition.available} asientos disponibles.`
+          : "",
       })),
     },
     {
