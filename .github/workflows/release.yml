@@ -56,8 +56,8 @@ jobs:
       - name: Build
         run: pnpm build
 
-      - name: Github diferences
-        run: git diff
+      - name: Github status
+        run: git status
 
       # - name: Publish to npm
       #   run: pnpm publish
