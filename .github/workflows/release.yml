@@ -25,6 +25,9 @@ jobs:
           prerelease: ${{ contains(github.ref, 'pre') || contains(github.ref, 'rc') }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Delete body.md
+        run: rm body.md
+
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
@@ -51,15 +54,12 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install
 
       - name: Build
         run: pnpm build
 
-      - name: Github status
-        run: git status
-
-      # - name: Publish to npm
-      #   run: pnpm publish
-      #   env:
-      #     NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+      - name: Publish to npm
+        run: pnpm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
